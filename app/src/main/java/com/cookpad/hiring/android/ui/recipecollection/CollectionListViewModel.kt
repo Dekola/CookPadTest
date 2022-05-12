@@ -17,6 +17,8 @@ import javax.inject.Inject
 class CollectionListViewModel @Inject constructor(private val repository: CollectionListRepository) :
     ViewModel() {
 
+    private var isShowingAllCollections = true
+
     private val _viewState = MutableStateFlow<CollectionListViewState>(Success(emptyList()))
     val viewState: StateFlow<CollectionListViewState> = _viewState
 
@@ -50,11 +52,14 @@ class CollectionListViewModel @Inject constructor(private val repository: Collec
     fun favoriteSelection(collection: Collection) {
         viewModelScope.launch {
             repository.favoriteSelection(collection)
+            if (!isShowingAllCollections)
+                loadFavoriteCollections()
         }
     }
 
     //Favorites list was selected if checked is true.
     fun toggleCollectionOption(checked: Boolean) {
+        isShowingAllCollections = !checked
         if (checked) {
             loadFavoriteCollections()
         } else {
