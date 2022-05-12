@@ -44,7 +44,7 @@ class CollectionListFragment : Fragment(R.layout.fragment_collection_list) {
         }
 
         viewLifecycleOwner.lifecycleScope.launch {
-            repeatOnLifecycle(Lifecycle.State.STARTED) {
+            viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
                 viewModel.viewState.collect { viewState ->
                     when (viewState) {
                         is CollectionListViewState.Success -> {
