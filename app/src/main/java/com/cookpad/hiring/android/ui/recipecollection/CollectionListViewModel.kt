@@ -46,6 +46,12 @@ class CollectionListViewModel @Inject constructor(private val repository: Collec
         super.onCleared()
         repository.onCleared()
     }
+
+    fun favoriteSelection(collection: Collection) {
+        viewModelScope.launch {
+            repository.favoriteSelection(collection)
+        }
+    }
 }
 
 sealed class CollectionListViewState {
