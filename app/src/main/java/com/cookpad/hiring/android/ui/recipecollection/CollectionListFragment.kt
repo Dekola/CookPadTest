@@ -30,10 +30,14 @@ class CollectionListFragment : Fragment(R.layout.fragment_collection_list) {
 
         _binding = FragmentCollectionListBinding.bind(view)
 
+        setViews()
         setUpRecyclerView()
 
         binding.swipeToRefresh.apply {
             setOnRefreshListener {
+                // Reset collectionOptionSwitch back to All collections because swipeToRefresh fetches all Collections
+                binding.collectionOptionSwitch.isChecked = false
+
                 isRefreshing = false
                 viewModel.refresh()
             }
@@ -60,6 +64,14 @@ class CollectionListFragment : Fragment(R.layout.fragment_collection_list) {
                         }
                     }
                 }
+            }
+        }
+    }
+
+    private fun setViews() {
+        with(binding){
+            collectionOptionSwitch.setOnCheckedChangeListener { _, isChecked ->
+                viewModel.toggleCollectionOption(isChecked)
             }
         }
     }

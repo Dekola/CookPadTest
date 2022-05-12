@@ -26,4 +26,10 @@ class CollectionListRepository @Inject constructor(
     suspend fun favoriteSelection(collection: Collection) {
         collectionListLocalDataSource.favoriteSelection(collection.toEntity())
     }
+
+    suspend fun loadFavoriteCollections(): List<Collection> {
+        return collectionListLocalDataSource.readFavouriteCollection().map { favoriteEntity ->
+            favoriteEntity.toPresentation()
+        }
+    }
 }

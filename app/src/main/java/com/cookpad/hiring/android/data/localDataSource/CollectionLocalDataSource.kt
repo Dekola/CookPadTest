@@ -26,4 +26,8 @@ class CollectionLocalDataSource @Inject constructor(
     private suspend fun deleteFavouriteCollection(favouriteEntity: FavouriteCollectionEntity) {
         favouriteDao.deleteFavouriteCollection(favouriteEntity)
     }
+
+    suspend fun readFavouriteCollection(): List<FavouriteCollectionEntity> {
+        return favouriteDao.readFavouriteCollection()
+    }
 }

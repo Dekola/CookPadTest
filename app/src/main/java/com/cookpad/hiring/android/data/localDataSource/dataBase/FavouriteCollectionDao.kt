@@ -14,4 +14,6 @@ interface FavouriteCollectionDao {
     @Query("SELECT Id FROM favourite_collection_table")
     suspend fun readFavouriteCollectionIDS(): List<Int>
 
+    @Query("SELECT * FROM favourite_collection_table ORDER BY Id ASC")
+    suspend fun readFavouriteCollection(): List<FavouriteCollectionEntity>
 }

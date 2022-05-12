@@ -52,6 +52,21 @@ class CollectionListViewModel @Inject constructor(private val repository: Collec
             repository.favoriteSelection(collection)
         }
     }
+
+    //Favorites list was selected if checked is true.
+    fun toggleCollectionOption(checked: Boolean) {
+        if (checked) {
+            loadFavoriteCollections()
+        } else {
+            loadCollections()
+        }
+    }
+
+    private fun loadFavoriteCollections() {
+        viewModelScope.launch {
+            _viewState.value = Success(repository.loadFavoriteCollections())
+        }
+    }
 }
 
 sealed class CollectionListViewState {
