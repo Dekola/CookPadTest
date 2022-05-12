@@ -41,6 +41,11 @@ class CollectionListViewModel @Inject constructor(private val repository: Collec
             }
         }
     }
+
+    override fun onCleared() {
+        super.onCleared()
+        repository.onCleared()
+    }
 }
 
 sealed class CollectionListViewState {

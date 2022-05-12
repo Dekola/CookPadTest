@@ -23,4 +23,8 @@ class CollectionListRepository @Inject constructor(
                 )
             }
         }
+
+    fun onCleared() {
+        collectionListRemoteDataSource.onCleared()
+    }
 }
