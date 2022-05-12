@@ -7,6 +7,10 @@ import javax.inject.Inject
 class CollectionLocalDataSource @Inject constructor(
     private val favouriteDao: FavouriteCollectionDao,
 ) {
+    suspend fun readFavouriteCollectionIDS(): List<Int> {
+        return favouriteDao.readFavouriteCollectionIDS()
+    }
+
     suspend fun favoriteSelection(favouriteEntity: FavouriteCollectionEntity) {
         if (favouriteEntity.isFavorite) {
             deleteFavouriteCollection(favouriteEntity)

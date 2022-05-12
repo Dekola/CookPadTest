@@ -11,4 +11,7 @@ interface FavouriteCollectionDao {
     @Delete
     suspend fun deleteFavouriteCollection(favouriteEntity: FavouriteCollectionEntity)
 
+    @Query("SELECT Id FROM favourite_collection_table")
+    suspend fun readFavouriteCollectionIDS(): List<Int>
+
 }
