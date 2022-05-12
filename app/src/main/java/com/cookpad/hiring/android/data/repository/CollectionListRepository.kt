@@ -1,14 +1,14 @@
-package com.cookpad.hiring.android.data
+package com.cookpad.hiring.android.data.repository
 
-import com.cookpad.hiring.android.data.api.CookpadHiringService
 import com.cookpad.hiring.android.data.entities.Collection
+import com.cookpad.hiring.android.data.localDataSource.CollectionRemoteDataSource
 import javax.inject.Inject
 
 
-class CollectionListRepository @Inject constructor(private val cookpadService: CookpadHiringService) {
+class CollectionListRepository @Inject constructor(private val collectionListRemoteDataSource: CollectionRemoteDataSource) {
 
-    suspend fun getCollectionList(): List<Collection> {
-        return cookpadService.getCollections().map { collectionDTO ->
+    suspend fun getCollectionList(): List<Collection> =
+        collectionListRemoteDataSource.getCollectionList().map { collectionDTO ->
             with(collectionDTO) {
                 Collection(
                     id = id,
@@ -19,5 +19,4 @@ class CollectionListRepository @Inject constructor(private val cookpadService: C
                 )
             }
         }
-    }
 }

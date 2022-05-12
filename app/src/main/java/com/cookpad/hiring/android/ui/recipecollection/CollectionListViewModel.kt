@@ -2,8 +2,8 @@ package com.cookpad.hiring.android.ui.recipecollection
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.cookpad.hiring.android.data.CollectionListRepository
 import com.cookpad.hiring.android.data.entities.Collection
+import com.cookpad.hiring.android.data.repository.CollectionListRepository
 import com.cookpad.hiring.android.ui.recipecollection.CollectionListViewState.Success
 import com.cookpad.hiring.android.ui.recipecollection.CollectionListViewState.Error
 import com.cookpad.hiring.android.ui.recipecollection.CollectionListViewState.Loading
