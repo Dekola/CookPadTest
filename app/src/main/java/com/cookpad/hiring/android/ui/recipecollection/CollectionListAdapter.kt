@@ -5,10 +5,10 @@ import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import com.cookpad.hiring.android.data.entities.Collection
 
-class CollectionListAdapter : ListAdapter<Collection, CollectionListViewHolder>(DIFF_CALLBACK) {
+class CollectionListAdapter(private val favoriteSelectionListener:(Collection)->Unit) : ListAdapter<Collection, CollectionListViewHolder>(DIFF_CALLBACK) {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): CollectionListViewHolder {
-        return CollectionListViewHolder.create(parent)
+        return CollectionListViewHolder.create(parent, favoriteSelectionListener)
     }
 
     override fun onBindViewHolder(holder: CollectionListViewHolder, position: Int) {

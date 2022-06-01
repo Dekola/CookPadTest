@@ -10,6 +10,7 @@ import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.cookpad.hiring.android.R
+import com.cookpad.hiring.android.data.entities.Collection
 import com.cookpad.hiring.android.databinding.FragmentCollectionListBinding
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collect
@@ -29,17 +30,21 @@ class CollectionListFragment : Fragment(R.layout.fragment_collection_list) {
 
         _binding = FragmentCollectionListBinding.bind(view)
 
+        setViews()
         setUpRecyclerView()
 
         binding.swipeToRefresh.apply {
             setOnRefreshListener {
+                // Reset collectionOptionSwitch back to All collections because swipeToRefresh fetches all Collections
+                binding.collectionOptionSwitch.isChecked = false
+
                 isRefreshing = false
                 viewModel.refresh()
             }
         }
 
         viewLifecycleOwner.lifecycleScope.launch {
-            repeatOnLifecycle(Lifecycle.State.STARTED) {
+            viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
                 viewModel.viewState.collect { viewState ->
                     when (viewState) {
                         is CollectionListViewState.Success -> {
@@ -63,12 +68,24 @@ class CollectionListFragment : Fragment(R.layout.fragment_collection_list) {
         }
     }
 
+    private fun setViews() {
+        with(binding){
+            collectionOptionSwitch.setOnCheckedChangeListener { _, isChecked ->
+                viewModel.toggleCollectionOption(isChecked)
+            }
+        }
+    }
+
     private fun setUpRecyclerView() {
         binding.collectionList.apply {
-            collectionListAdapter = CollectionListAdapter()
+            collectionListAdapter = CollectionListAdapter(::favoriteSelection)
             adapter = collectionListAdapter
             layoutManager = LinearLayoutManager(requireContext())
         }
+    }
+
+    private fun favoriteSelection(collection: Collection){
+        viewModel.favoriteSelection(collection)
     }
 
     override fun onDestroy() {

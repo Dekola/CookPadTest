@@ -2,8 +2,10 @@ package com.cookpad.hiring.android.data
 
 import com.cookpad.hiring.android.data.api.CookpadHiringService
 import com.cookpad.hiring.android.data.dtos.CollectionDTO
+import com.cookpad.hiring.android.data.remoteDataSource.CollectionRemoteDataSource
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.cancel
 import kotlinx.coroutines.test.UnconfinedTestDispatcher
 import kotlinx.coroutines.test.resetMain
 import kotlinx.coroutines.test.runTest
@@ -16,7 +18,7 @@ import org.mockito.kotlin.mock
 import org.mockito.kotlin.whenever
 
 @ExperimentalCoroutinesApi
-class CollectionListRepositoryTest {
+class CollectionListRemoteDataSourceTest {
 
     private val dispatcher = UnconfinedTestDispatcher()
     private val mockCookpadService: CookpadHiringService = mock()
@@ -29,6 +31,7 @@ class CollectionListRepositoryTest {
     @After
     fun tearDown() {
         Dispatchers.resetMain()
+        dispatcher.cancel()
     }
 
     @Test
@@ -36,7 +39,7 @@ class CollectionListRepositoryTest {
         val collectionDto = getCollectionsDto()
         runTest {
             whenever(mockCookpadService.getCollections()).thenReturn(collectionDto)
-            val collectionListRepository = CollectionListRepository(mockCookpadService)
+            val collectionListRepository = CollectionRemoteDataSource(mockCookpadService, dispatcher)
 
             val collectionList = collectionListRepository.getCollectionList()
 

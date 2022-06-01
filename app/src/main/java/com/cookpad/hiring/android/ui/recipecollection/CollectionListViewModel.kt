@@ -2,8 +2,8 @@ package com.cookpad.hiring.android.ui.recipecollection
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.cookpad.hiring.android.data.CollectionListRepository
 import com.cookpad.hiring.android.data.entities.Collection
+import com.cookpad.hiring.android.data.repository.CollectionListRepository
 import com.cookpad.hiring.android.ui.recipecollection.CollectionListViewState.Success
 import com.cookpad.hiring.android.ui.recipecollection.CollectionListViewState.Error
 import com.cookpad.hiring.android.ui.recipecollection.CollectionListViewState.Loading
@@ -16,6 +16,8 @@ import javax.inject.Inject
 @HiltViewModel
 class CollectionListViewModel @Inject constructor(private val repository: CollectionListRepository) :
     ViewModel() {
+
+    private var isShowingAllCollections = true
 
     private val _viewState = MutableStateFlow<CollectionListViewState>(Success(emptyList()))
     val viewState: StateFlow<CollectionListViewState> = _viewState
@@ -39,6 +41,35 @@ class CollectionListViewModel @Inject constructor(private val repository: Collec
             }.onSuccess { collection ->
                 _viewState.value = Success(collection)
             }
+        }
+    }
+
+    override fun onCleared() {
+        super.onCleared()
+        repository.onCleared()
+    }
+
+    fun favoriteSelection(collection: Collection) {
+        viewModelScope.launch {
+            repository.favoriteSelection(collection)
+            if (!isShowingAllCollections)
+                loadFavoriteCollections()
+        }
+    }
+
+    //Favorites list was selected if checked is true.
+    fun toggleCollectionOption(checked: Boolean) {
+        isShowingAllCollections = !checked
+        if (checked) {
+            loadFavoriteCollections()
+        } else {
+            loadCollections()
+        }
+    }
+
+    private fun loadFavoriteCollections() {
+        viewModelScope.launch {
+            _viewState.value = Success(repository.loadFavoriteCollections())
         }
     }
 }
